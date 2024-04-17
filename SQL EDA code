@@ -1,0 +1,191 @@
+Link to code: https://console.cloud.google.com/bigquery?sq=788260186556:ed0f532cbae541f4b7ff952cccc01b92
+
+-- How many people got approved
+SELECT COUNT(Approved) AS Approved_count
+FROM `rv-case-study.BankRate.loan_data` as data
+WHERE Approved = 1;
+
+-- What are all the Employment sectors in the data
+SELECT DISTINCT Employment_Sector
+FROM `rv-case-study.BankRate.loan_data`;
+
+-- How many people got approved in each section
+SELECT 
+    Employment_Sector,
+    COUNT(*) AS Total_Applications,
+    SUM(Approved) AS Approved_Count,
+    AVG(Approved) AS Approval_Avg
+FROM `rv-case-study.BankRate.loan_data`
+GROUP BY Employment_Sector;
+
+-- Each Lender's average approval rate
+SELECT Lender,
+    COUNT(*) AS Total_Applications,
+    SUM(Approved) AS Approved_Applications,
+    AVG(Approved) AS Approval_Rate
+FROM `rv-case-study.BankRate.loan_data`
+GROUP BY Lender;
+
+-- What type of customer gets approved
+SELECT
+    Employment_Sector,
+    Lender,
+    COUNT(*) AS Total_Applications,
+    SUM(Approved) AS Approved_Applications
+FROM `rv-case-study.BankRate.loan_data`
+GROUP BY
+    Employment_Sector,
+    Lender
+ORDER BY
+    Employment_Sector,
+    Lender;
+
+-- MAX and MIN loan amount approved
+SELECT MIN(Loan_Amount) AS MIN_Approved_Loan_Amount,
+MAX(Loan_Amount) AS MAX_Approved_Loan_Amount
+FROM `rv-case-study.BankRate.loan_data`
+WHERE Approved = 1;
+
+SELECT AVG(Loan_Amount) AS Average_Loan_Amount
+FROM `rv-case-study.BankRate.loan_data`;
+
+-- AVG loan amount approved
+SELECT
+    AVG(CASE WHEN Approved = 1 THEN Loan_Amount ELSE NULL END) AS Average_Approved_Loan_Amount
+FROM `rv-case-study.BankRate.loan_data`;
+
+SELECT
+    Lender,
+    AVG(CASE WHEN Approved = 1 THEN Loan_Amount ELSE NULL END) AS Avg_Loan_Amount_Approved
+FROM `rv-case-study.BankRate.loan_data`
+GROUP BY Lender;
+
+-- MAX and MIN FICO score approved
+SELECT MIN(FICO_score) AS MIN_Approved_FICO_score
+FROM `rv-case-study.BankRate.loan_data`
+WHERE Approved = 1;
+
+SELECT AVG(FICO_Score) AS Average_FICO_Score
+FROM `rv-case-study.BankRate.loan_data`;
+
+-- AVG FICO score appproved
+SELECT
+    AVG(CASE WHEN Approved = 1 THEN FICO_score ELSE NULL END) AS Average_Approved_FICO_score
+FROM `rv-case-study.BankRate.loan_data`;
+
+-- Per lender
+SELECT
+    Lender,
+    AVG(CASE WHEN Approved = 1 THEN FICO_Score ELSE NULL END) AS Avg_FICO_Score_Approved
+FROM `rv-case-study.BankRate.loan_data`
+GROUP BY Lender;
+
+-- FICO score approval rating
+SELECT
+    FICO_Score_Group,
+    COUNT(*) AS Total_Applications,
+    SUM(Approved) AS Approved_Applications,
+    AVG(Approved) AS Approval_Rate
+FROM `rv-case-study.BankRate.loan_data`
+GROUP BY FICO_Score_Group;
+
+-- FICO Score, Lender, Total App, Approved App, Approval Rate
+SELECT
+    FICO_Score_Group,
+    Lender,
+    COUNT(*) AS Total_Applications,
+    SUM(Approved) AS Approved_Applications,
+    AVG(Approved) AS Approval_Rate
+FROM `rv-case-study.BankRate.loan_data`
+GROUP BY
+    FICO_Score_Group,
+    Lender
+ORDER BY
+    FICO_Score_Group,
+    Lender;
+
+-- Reasons for loans
+SELECT DISTINCT Reason
+FROM `rv-case-study.BankRate.loan_data`
+
+-- Reasons approval rate
+SELECT
+    Reason,
+    Lender,
+    COUNT(*) AS Total_Applications,
+    SUM(Approved) AS Approved_Applications,
+    AVG(Approved) AS Approval_Rate
+FROM `rv-case-study.BankRate.loan_data`
+GROUP BY
+    Reason,
+    Lender
+ORDER BY
+    Reason,
+    Lender;
+
+-- AVG rate of approval for reasons
+SELECT
+    Reason,
+    AVG(Approved) AS Approval_Rate
+FROM `rv-case-study.BankRate.loan_data`
+GROUP BY Reason;
+
+-- Approval rating based on employment status
+SELECT
+    Employment_Status,
+    COUNT(*) AS Total_Applications,
+    SUM(Approved) AS Approved_Applications,
+    AVG(Approved) AS Approval_Rate
+FROM `rv-case-study.BankRate.loan_data`
+GROUP BY Employment_Status;
+
+-- Employment status approval by lender
+SELECT
+    Employment_Status,
+    Lender,
+    COUNT(*) AS Approved_Count
+FROM
+    `rv-case-study.BankRate.loan_data`
+WHERE
+    Approved = 1
+GROUP BY
+    Employment_Status,
+    Lender
+ORDER BY Lender;
+
+-- Monthly Gross income
+SELECT
+    MAX(Monthly_Gross_Income) AS Max_Income,
+    MIN(Monthly_Gross_Income) AS Min_Income,
+    AVG(Monthly_Gross_Income) AS Avg_Income
+FROM `rv-case-study.BankRate.loan_data`;
+
+-- Monthly gross income approved
+SELECT
+    MAX(Monthly_Gross_Income) AS Max_Income_Approved,
+    MIN(Monthly_Gross_Income) AS Min_Income_Approved,
+    AVG(Monthly_Gross_Income) AS Avg_Income_Approved
+FROM `rv-case-study.BankRate.loan_data`
+WHERE Approved = 1;
+
+-- AVG income for lender approval
+SELECT
+    Lender,
+    AVG(CASE WHEN Approved = 1 THEN Monthly_Gross_Income ELSE NULL END) AS Avg_Income_Approved
+FROM `rv-case-study.BankRate.loan_data`
+GROUP BY Lender;
+
+SELECT
+    Lender,
+    Monthly_Gross_Income
+FROM `rv-case-study.BankRate.loan_data`
+WHERE Approved = 1;
+
+-- Lender Revenue
+SELECT
+    Lender,
+    COUNT(*) AS Approved_Applications,
+    SUM(Bounty) AS Total_Revenue
+FROM `rv-case-study.BankRate.loan_data`
+WHERE Approved = 1
+GROUP BY Lender;
